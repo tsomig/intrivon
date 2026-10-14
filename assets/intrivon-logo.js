@@ -52,7 +52,7 @@
   function caption(text, alpha) {
     if (alpha <= 0) return;
     ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = rgb(AQUA);
-    ctx.font = '600 17px Commissioner, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '700 17px Calibri, Carlito, "Segoe UI", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0.18em';
     ctx.fillText(text, CX + 4, 586); ctx.restore();
   }
@@ -317,7 +317,7 @@
 
   const refit = () => { fit(); if (reduced.matches && !playing) still(); else draw(elapsed); };
   if ('ResizeObserver' in window) new ResizeObserver(refit).observe(canvas); else window.addEventListener('resize', refit);
-  if (document.fonts && document.fonts.load) document.fonts.load('600 17px Commissioner').catch(() => {});
+  if (document.fonts && document.fonts.load) document.fonts.load('700 17px Carlito').catch(() => {});
   fit();
   if (reduced.matches) still(); else draw(0);
   sync();
