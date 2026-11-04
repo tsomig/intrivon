@@ -1,0 +1,4 @@
+Photograph: Clay Banks / Unsplash
+Source: https://unsplash.com/photos/a-view-of-a-city-from-a-bridge-nsAn3nSW5T0
+License: https://unsplash.com/license
+Downloaded 2026-10-19. Original photograph, displayed with CSS object-fit cropping.

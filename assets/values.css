@@ -1,0 +1,32 @@
+#values .core-stage{display:grid;border-radius:36px;overflow:hidden;background:#f1f2f2;isolation:isolate}
+#values .core-slide{grid-area:1/1;display:grid;grid-template-columns:1fr 1fr;min-height:420px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .7s ease,visibility .7s}
+#values .core-slide[hidden]{display:grid}
+#values .core-slide.is-active{visibility:visible;opacity:1;pointer-events:auto}
+#values .core-copy{padding:40px 44px;align-self:start}
+#values .core-copy h3{font:400 clamp(30px,3.5vw,50px)/1.12 var(--serif);letter-spacing:-.025em;margin:0 0 24px;color:#142339}
+#values .core-copy p{font:400 clamp(15px,1.2vw,18px)/1.65 var(--sans);color:#566373;margin:0}
+#values .core-photo{position:relative;overflow:hidden;min-height:420px}
+#values .core-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+#values .core-slide:nth-child(2) img{object-position:70% center}
+#values .core-slide:nth-child(4) img{object-position:65% center}
+#values .core-controls{display:flex;justify-content:flex-end;gap:8px;margin-top:22px}
+#values .core-controls button{display:grid;place-items:center;flex:0 0 auto;width:36px;height:36px;padding:0;border:0;border-radius:6px;background:#f2f2f2;color:#343434;cursor:pointer;transition:background .18s ease}
+#values .core-controls button:hover{background:#e4e4e4;color:#171717}
+#values .core-controls button:focus-visible{outline:2px solid #64d3ce;outline-offset:4px}
+#values .core-controls svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#values .core-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:800px){#values .core-slide{grid-template-columns:1fr}#values .core-copy{padding:30px;min-height:300px}#values .core-photo{min-height:280px;aspect-ratio:4/3}#values .core-stage{border-radius:28px}}
+@media(max-width:700px){#values .core-controls button{width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){#values .core-slide,#values .core-controls button{transition:none}}
+
+/* Same type scale as the Sectors summary at the same viewport width. */
+#values .core-carousel{container-type:inline-size}
+#values .core-copy h3{font-family:var(--serif);font-size:calc(2.925cqw - .819px);font-weight:400;line-height:1.22;letter-spacing:-.025em;color:var(--ink)}
+#values .core-copy p{text-align:justify;text-align-last:left;max-width:none}
+@media(max-width:700px){#values .core-copy h3{font-size:5.85cqw}}
+
+
+#values .core-photo .light-layer{pointer-events:none;mix-blend-mode:screen}
+@media(prefers-reduced-motion:reduce){#values .core-photo .light-layer{display:none}}
+
+#values .core-slide:nth-child(3) .light-layer{mix-blend-mode:normal}

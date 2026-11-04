@@ -1,0 +1,53 @@
+#sectors{background:#fff;color:var(--ink)}
+#sectors .section-top p{color:var(--muted)}
+#sectors .sector-track{display:flex;gap:28px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-top:40px}
+#sectors .sector-track::-webkit-scrollbar{display:none}
+#sectors .sector-slide{position:relative;isolation:isolate;flex:0 0 calc((100% - 28px)/2);min-width:0;min-height:700px;padding:32px;display:flex;flex-direction:column;justify-content:space-between;gap:190px;scroll-snap-align:start;overflow:hidden}
+#sectors .sector-slide>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+#sectors .sector-slide:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,29,46,.15),transparent 40%,rgba(16,29,46,.12));z-index:-1;pointer-events:none}
+#sectors h3.sector-label{align-self:flex-start;max-width:100%;margin:0;padding:12px 22px;border:1.5px solid white;border-radius:20px;background:rgba(16,29,46,.65);color:white;font-size:clamp(.8rem,1.15vw,1.05rem);font-weight:500;letter-spacing:.025em;line-height:1.4}
+#sectors .sector-copy{padding:30px;border-radius:32px;background:rgba(235,241,242,.94);backdrop-filter:blur(12px)}
+#sectors .sector-copy p{margin:0;max-width:none;color:var(--muted);font-size:clamp(1rem,1.35vw,1.2rem);line-height:1.65}
+#sectors .sector-pagination{display:flex;justify-content:flex-end;gap:12px;margin-top:20px}
+#sectors .sector-pagination button{width:44px;height:44px;border:0;background:transparent;position:relative;cursor:pointer;padding:0;color:#111}
+#sectors .sector-pagination button:before{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:currentColor;top:50%;left:50%;transform:translate(-50%,-50%)}
+#sectors .sector-pagination button[aria-current="true"]:after{content:"";position:absolute;width:20px;height:20px;border:1.5px solid currentColor;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+#sectors .sector-pagination button:focus-visible,#sectors .sector-track:focus-visible{outline:2px solid #0A8C8C;outline-offset:3px}
+@media(max-width:700px){#sectors .sector-slide{flex-basis:100%;min-height:620px;padding:20px;gap:160px}#sectors .sector-copy{padding:24px;border-radius:28px}#sectors h3.sector-label{font-size:.82rem;padding:10px 16px}#sectors .sector-pagination{gap:4px}}
+
+/* Expand the text panel evenly to the card edges. */
+#sectors .sector-copy{position:absolute;left:32px;right:32px;bottom:32px;min-height:0;box-sizing:border-box;transition:left .45s ease,right .45s ease,bottom .45s ease,min-height .45s ease,border-radius .45s ease,padding .45s ease,background .45s ease;z-index:1}
+#sectors .sector-label{position:relative;z-index:2;pointer-events:none}
+#sectors .sector-slide.is-expanded .sector-copy{left:0;right:0;bottom:0;min-height:100%;border-radius:0;padding:130px 40px 40px;background:#EBF1F2}
+#sectors .sector-expand{position:absolute;inset:0;z-index:3;border:0;background:transparent;cursor:pointer;border-radius:0}
+#sectors .sector-expand:focus-visible{outline:3px solid #0A8C8C;outline-offset:-5px}
+@media(max-width:700px){#sectors .sector-copy{left:20px;right:20px;bottom:20px}#sectors .sector-slide.is-expanded .sector-copy{padding:120px 28px 28px}}
+@media(prefers-reduced-motion:reduce){#sectors .sector-copy{transition:none}}
+
+/* Compact summary at rest; complete copy on expansion. */
+#sectors .sector-copy{left:40px;right:40px;bottom:32px;padding:26px 28px;border-radius:28px}
+#sectors .sector-copy .sector-summary{font-size:clamp(1.05rem,1.7vw,1.5rem);font-weight:400;color:var(--ink);line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#sectors .sector-detail[hidden]{display:none}
+#sectors .sector-copy .sector-detail{margin-top:28px}
+#sectors .sector-slide.is-expanded .sector-summary{display:block;overflow:visible}
+@media(max-width:700px){#sectors .sector-copy{left:28px;right:28px;bottom:24px;padding:22px;border-radius:24px}#sectors .sector-copy .sector-summary{font-size:1.1rem}}
+
+/* Match the supplied Outfit heading reference. */
+#sectors .sector-copy .sector-summary{font-family:var(--serif);font-size:clamp(1.45rem,2vw,1.8rem);font-weight:400;line-height:1.15;letter-spacing:-.025em;color:var(--ink)}
+@media(max-width:600px){#sectors .sector-copy .sector-summary{font-size:1.5rem}}
+
+#sectors .sector-slide:not(.is-expanded) .sector-copy{min-height:150px;display:flex;align-items:center}
+@media(max-width:700px){#sectors .sector-slide:not(.is-expanded) .sector-copy{min-height:140px}}
+
+/* Reference proportions: 750 x 1000 card, 670 x 350 inset panel. */
+#sectors .sector-slide{container-type:inline-size;aspect-ratio:3/4;min-height:0;padding:0;display:block}
+#sectors h3.sector-label{position:absolute;left:5.33%;top:4%;max-width:89.34%;font-size:clamp(.8rem,3.45cqw,1.6rem);padding:1.8% 5.3%;border-radius:20px}
+#sectors .sector-slide:not(.is-expanded) .sector-copy{left:5.33%;right:5.33%;bottom:4%;height:35%;min-height:0;padding:5.33%;border-radius:5.33cqw;display:block}
+#sectors .sector-copy .sector-summary{font-size:5.85cqw;line-height:1.22;font-weight:400;letter-spacing:-.025em}
+#sectors .sector-slide.is-expanded .sector-copy{padding:17% 5.33% 5.33%;height:100%;overflow-y:auto}
+#sectors .sector-copy .sector-detail{font-size:clamp(.9rem,3.5cqw,1.25rem);line-height:1.5}
+
+/* Translucent, frosted panels retain the underlying image colours. */
+#sectors .sector-copy,#sectors .sector-slide.is-expanded .sector-copy{background:rgba(235,241,242,.7);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+#sectors .sector-copy .sector-detail{color:var(--ink)}
+@supports not ((backdrop-filter:blur(20px)) or (-webkit-backdrop-filter:blur(20px))){#sectors .sector-copy,#sectors .sector-slide.is-expanded .sector-copy{background:rgba(235,241,242,.94)}}

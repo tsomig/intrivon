@@ -1,0 +1,81 @@
+/* One shared stage: the original navy hero surface, with synchronized copy. */
+#what-we-do .section-top{display:block;margin-bottom:clamp(40px,5vw,64px)}
+#what-we-do .section-top h2{margin-bottom:0;max-width:24ch}
+#what-we-do .method-description{width:min(100%,760px);max-width:70ch;margin:clamp(24px,3vw,40px) 0 0;text-align:left;font-size:1.16rem;line-height:1.65;color:var(--muted)}
+.method-stage{position:relative;isolation:isolate;overflow:hidden;border-radius:clamp(24px,3.2vw,40px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(24px,4vw,56px);padding:clamp(32px,4.8vw,64px);background:var(--night);color:var(--white)}
+.method-stage::after{content:"";position:absolute;z-index:-1;right:-8%;top:50%;width:min(900px,80vw);aspect-ratio:1;transform:translateY(-50%);background:radial-gradient(circle,rgba(10,140,140,.26) 0,rgba(10,140,140,.08) 38%,transparent 66%);pointer-events:none}
+.method-copy{min-width:0;padding-block:16px}
+.method-panels{display:grid}
+.method-step{grid-area:1/1;align-self:start}
+.method-ready .method-step{opacity:0;visibility:hidden;pointer-events:none}
+.method-ready .method-step.is-active{opacity:1;visibility:visible;pointer-events:auto}
+#what-we-do .method-step .number{color:#0A8C8C;margin-bottom:26px;font-size:.875rem}
+#what-we-do .method-step h3{color:var(--white);font-size:1.35rem;line-height:1.14;margin:0 0 22px;font-weight:400;max-width:14em}
+#what-we-do .method-step p{color:var(--on-night);font-size:1rem;line-height:1.65;margin:0;max-width:33em}
+.method-navigation{display:flex;gap:12px;margin-top:38px}
+.method-navigation button{min-width:52px;min-height:44px;padding:8px 12px;border:0;border-bottom:2px solid #405565;background:none;color:var(--on-night-muted);font:500 .8125rem/1.4 var(--sans);letter-spacing:.08em;cursor:pointer;transition:color .2s,border-color .2s}
+.method-navigation button[aria-pressed="true"],.method-navigation button:hover{color:var(--aqua);border-color:var(--aqua)}
+#what-we-do .method-art{width:100%;max-width:510px;justify-self:end;min-width:0;gap:0}
+#what-we-do .method-art canvas{width:100%;max-width:510px}
+.method-toggle{position:absolute;bottom:24px;right:24px;display:flex;align-items:center;justify-content:center;width:44px;height:44px;padding:12px;background:transparent;border:1px solid #405565;color:var(--on-night);cursor:pointer}
+.method-toggle:hover{border-color:var(--aqua);color:var(--aqua)}
+.method-toggle svg{width:16px;height:16px;fill:currentColor}
+.method-toggle .play-icon{display:none}
+.method-toggle[data-paused="true"] .play-icon{display:block}
+.method-toggle[data-paused="true"] .pause-icon{display:none}
+.method-stage :focus-visible{outline:2px solid var(--aqua);outline-offset:5px}
+.method-navigation[hidden],.method-toggle[hidden]{display:none}
+/* If scripting/canvas is unavailable, every stage remains readable here. */
+.method-stage:not(.method-ready) .method-panels{display:block}
+.method-stage:not(.method-ready) .method-step+.method-step{margin-top:36px}
+.no-js #what-we-do .method-art{min-height:320px;background:url("intrivon-mark-dark.svg") center/80% no-repeat}
+@media(max-width:900px){
+ .method-stage{gap:24px;padding:36px}
+}
+@media(max-width:700px){
+ #what-we-do .section-top{margin-bottom:36px}
+ .method-stage{grid-template-columns:1fr;gap:4px;padding:32px 26px 54px}
+ .method-copy{padding:0}
+ #what-we-do .method-step .number{margin-bottom:20px}
+ #what-we-do .method-step h3{margin-bottom:18px}
+ .method-navigation{margin-top:24px}
+ #what-we-do .method-art{max-width:360px;justify-self:center}
+ .method-toggle{right:20px;bottom:18px}
+ .method-stage::after{width:700px;max-width:none;top:74%;right:-220px}
+}
+@media(prefers-reduced-motion:reduce){.method-ready .method-step,.method-navigation button{transition:none;transform:none}}
+
+
+/* Four-card platform carousel, animation left and copy right. */
+#what-we-do .method-stage{overflow:visible;background:#fff;color:#222;border:1px solid #64D3CE;border-radius:42px;padding:clamp(24px,4vw,56px);margin-bottom:76px;column-gap:clamp(24px,4vw,56px)}
+#what-we-do .method-stage::after{display:none}
+#what-we-do .method-copy{grid-column:2;grid-row:1}
+#what-we-do .method-art{grid-column:1;grid-row:1;justify-self:center}
+#what-we-do .method-step .number{color:#0A8C8C;font-size:1rem;font-weight:600;margin-bottom:20px}
+#what-we-do .method-step h3{color:var(--ink);font-size:clamp(1.65rem,3vw,2.5rem);font-weight:400;max-width:none;line-height:1.2}
+#what-we-do .method-step p{color:var(--muted);font-size:clamp(1rem,1.55vw,1.16rem);line-height:1.65}
+#what-we-do .method-navigation{position:absolute;right:0;bottom:-68px;margin:0;gap:12px}
+#what-we-do .method-navigation button{position:relative;width:44px;height:44px;min-width:44px;padding:0;border:1px solid transparent;border-radius:50%;color:#222}
+#what-we-do .method-navigation button::after{content:"";position:absolute;width:7px;height:7px;background:currentColor;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%)}
+#what-we-do .method-navigation button[aria-pressed="true"]{border-color:#222;color:#222}
+#what-we-do .method-navigation button:hover{color:var(--teal-brand)}
+#what-we-do .method-toggle{left:0;right:auto;bottom:-66px;color:#222;border-color:#bbc3c8;background:#fff}
+@media(max-width:700px){
+ #what-we-do .method-stage{grid-template-columns:1fr;border-radius:28px;padding:24px;gap:16px}
+ #what-we-do .method-art{grid-column:1;grid-row:1;max-width:300px}
+ #what-we-do .method-copy{grid-column:1;grid-row:2}
+ #what-we-do .method-step h3{font-size:1.65rem}
+}
+
+/* Compact pagination rings with generous transparent touch targets. */
+#what-we-do .method-navigation{gap:0}
+#what-we-do .method-navigation button{border:0;background:transparent;color:#000}
+#what-we-do .method-navigation button::after{width:6px;height:6px}
+#what-we-do .method-navigation button::before{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;box-sizing:border-box;border:1px solid transparent;border-radius:50%;transform:translate(-50%,-50%)}
+#what-we-do .method-navigation button[aria-pressed="true"]{color:#000}
+#what-we-do .method-navigation button[aria-pressed="true"]::before{border-color:currentColor}
+#what-we-do .method-navigation button:hover{color:var(--teal-brand)}
+
+/* Each phase uses the same label, headline and paragraph tracks. */
+#what-we-do .method-ready .method-panels{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto}
+#what-we-do .method-ready .method-step{grid-column:1;grid-row:1 / span 3;align-self:stretch;display:grid;grid-template-rows:subgrid;align-items:start}

@@ -1,0 +1,45 @@
+#services{background:#F1F2F2}
+#services .service-library{min-width:0}
+#services .service-track{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0;overscroll-behavior-x:contain}
+#services .service-track::-webkit-scrollbar{display:none}
+#services .service-card{position:relative;isolation:isolate;flex:0 0 calc((100% - 40px)/3);height:520px;overflow:hidden;background:#172528;color:white;scroll-snap-align:start;scroll-snap-stop:always}
+#services .service-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:none;transition:transform .7s ease}
+#services .service-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,30,31,.3),rgba(16,25,28,.12) 30%,rgba(16,25,28,.94) 100%);transition:background .35s}
+#services .service-index{position:absolute;top:26px;left:26px;font-size:11px;letter-spacing:.15em;color:#c1ece6}
+#services .service-copy{position:absolute;left:26px;right:26px;bottom:70px;z-index:1}
+#services .service-copy h3{font-size:clamp(1.45rem,2vw,1.8rem);line-height:1.15;font-weight:500;letter-spacing:-.025em;margin:0;color:#fff}
+#services .service-description p{font-size:1rem;line-height:1.55;color:#f1f5f4;margin:20px 0 0;max-width:none}
+#services .service-description:not([hidden]){animation:service-reveal .35s ease both}
+#services .service-card.is-open .service-shade{background:linear-gradient(180deg,rgba(7,18,24,.08),rgba(7,18,24,.08) 38%,rgba(7,18,24,.88) 100%)}
+#services .service-card.is-open>img{transform:scale(1.045)}
+#services .service-toggle{position:absolute;inset:0;z-index:2;cursor:pointer;background:transparent;border:0;color:#fff;text-align:right;padding:0}
+#services .service-toggle span{position:absolute;bottom:23px;right:26px;font:300 30px/1 Arial;transition:transform .3s}
+#services .service-toggle[aria-expanded=true] span{transform:rotate(45deg)}
+#services .service-toggle:focus-visible{outline:3px solid #74d8cf;outline-offset:-5px}
+#services .service-controls{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:24px}
+#services .service-position{font-size:12px;letter-spacing:.12em;margin-right:12px;font-variant-numeric:tabular-nums}
+#services .service-controls button{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:6px;background:#f2f2f2;color:#343434;cursor:pointer;transition:background .2s,color .2s}
+#services .service-controls button:hover:not(:disabled){background:#e4e4e4;color:#171717}
+#services .service-controls button:disabled{opacity:.25;cursor:default}
+#services .service-controls svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@keyframes service-reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media(max-width:1050px){#services .service-card{flex-basis:calc((100% - 20px)/2)}}
+@media(max-width:600px){#services .service-track{gap:14px}#services .service-card{flex-basis:88%;height:500px}#services .service-copy{left:22px;right:22px}#services .service-copy h3{font-size:1.5rem}#services .service-description p{font-size:.94rem}#services .service-index{left:22px}#services .service-controls{margin-top:20px}}
+@media(prefers-reduced-motion:reduce){#services *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+#services .service-controls button:focus-visible{outline:2px solid var(--aqua);outline-offset:4px}
+@media(max-width:700px){#services .service-controls button{width:44px;height:44px}}
+
+/* v101: subtly more vivid violet–turquoise grade; original photos and shading retained. */
+#services .service-card>img{filter:grayscale(1);object-position:var(--service-focus,50% 50%)}
+#services .service-card::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(45.73deg,rgba(43,11,158,.74) 34.05%,rgba(0,255,204,.74) 105.44%);mix-blend-mode:color}
+#services .service-shade{z-index:2;background:linear-gradient(180deg,rgba(7,18,24,.08),rgba(7,18,24,.08) 38%,rgba(7,18,24,.88) 100%)}
+#services .service-index,#services .service-copy{z-index:3}
+#services .service-toggle{z-index:4}
+#services .service-card:nth-child(2){--service-focus:66% 50%}
+#services .service-card:nth-child(3){--service-focus:43% 50%}
+#services .service-card:nth-child(4){--service-focus:32% 50%}
+#services .service-card:nth-child(8){--service-focus:43% 50%}
+
+/* Balance the bright monitor and white background in service 04. */
+#services .service-card:nth-child(4)>img{filter:grayscale(1) brightness(.82)}

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" role="img" aria-labelledby="title desc">
+  <title id="title">LEVNAR blue option 3 — 26 Broadway blue</title>
+  <desc id="desc">Three evidence streams converge into one decision point, followed by a clear forward direction, beside the LEVNAR wordmark.</desc>
+  <defs>
+    <style>
+      .ink{fill:#142339}.line{fill:none;stroke:#142339;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}.teal{fill:#0A8C8C}.teal-line{fill:none;stroke:#0A8C8C;stroke-width:13;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+  </defs>
+  <g transform="translate(90 102)">
+    <path class="line" d="M14 50h64l78 108"/>
+    <path class="line" d="M14 158h142"/>
+    <path class="line" d="M14 266h64l78-108"/>
+    <circle class="ink" cx="14" cy="50" r="12"/>
+    <circle class="ink" cx="14" cy="158" r="12"/>
+    <circle class="ink" cx="14" cy="266" r="12"/>
+    <path class="teal" d="M156 131l27 27-27 27-27-27z"/>
+    <path class="teal-line" d="M188 158h106"/>
+    <path class="teal-line" d="M272 135l23 23-23 23"/>
+  </g>
+  <text x="480" y="302" class="ink" font-family="Avenir Next, Montserrat, Helvetica Neue, Arial, sans-serif" font-size="156" font-weight="650" letter-spacing="12">LEVNAR</text>
+  <text x="488" y="367" fill="#52647B" font-family="Avenir Next, Montserrat, Helvetica Neue, Arial, sans-serif" font-size="29" font-weight="500" letter-spacing="7">TRUSTED DECISION INTELLIGENCE</text>
+</svg>
