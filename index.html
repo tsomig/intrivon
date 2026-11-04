@@ -631,12 +631,12 @@ button,.text-link,.btn,.button{font-weight:700}
 <dialog class="contact-dialog" id="contact-dialog" aria-labelledby="contact-title">
   <button class="contact-close" type="button" aria-label="Close contact form">×</button>
   <h2 id="contact-title">Contact Us</h2>
-  <form class="contact-form" action="https://formsubmit.co/vtri@intrivon.com" method="POST" accept-charset="UTF-8">
-    <input type="hidden" name="_subject" value="INTRIVON | New website inquiry">
-    <input type="hidden" name="_template" value="table">
-    <input type="hidden" name="_next" value="https://www.intrivon.com/contact-sent.html">
-    <input type="hidden" name="_cc" value="gts@intrivon.com">
-    <input class="contact-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" accept-charset="UTF-8">
+    <input type="hidden" name="access_key" value="f78147a5-6be7-426a-aae9-67b2f706f6b2">
+    <input type="hidden" name="subject" value="INTRIVON | New website inquiry">
+    <input type="hidden" name="from_name" value="INTRIVON website">
+    <input type="hidden" name="redirect" value="https://www.intrivon.com/contact-sent.html">
+    <input class="contact-honey" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true">
     <div class="contact-field"><label for="contact-name">Name *</label><input id="contact-name" name="name" autocomplete="name" maxlength="120" required autofocus></div>
     <div class="contact-field"><label for="contact-email">Email *</label><input id="contact-email" name="email" type="email" autocomplete="email" maxlength="254" required></div>
     <div class="contact-row">
