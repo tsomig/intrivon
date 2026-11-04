@@ -6,11 +6,3 @@ footer.intrivon-footer{background:#142339;color:#fff;padding:36px 0 20px;font:40
 .intrivon-footer .footer-policies a:hover,.intrivon-footer .footer-policies a:focus-visible{color:#64d3ce}
 .intrivon-footer .footer-policies a:hover::after,.intrivon-footer .footer-policies a:focus-visible::after{transform:scaleX(1)}
 @media(prefers-reduced-motion:reduce){.intrivon-footer .footer-policies a,.intrivon-footer .footer-policies a::after{transition:none}}
-
-/* Contact button, centred below the FOLLOW US row (same pill style as the former next-step button). */
-.footer-contact{display:flex;justify-content:center;margin:0 0 32px}
-.intrivon-footer .footer-contact-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:11px 26px;border-radius:999px;color:#173c36;background:var(--aqua);font:400 .875rem/1.3 var(--sans);text-decoration:none;transition:background .2s}
-.intrivon-footer .footer-contact-button:hover{background:#8fe3df;color:#173c36}
-.intrivon-footer .footer-contact-button:focus-visible{outline:2px solid #fff;outline-offset:4px}
-@media(max-width:700px){.footer-contact{margin-bottom:26px}}
-@media(prefers-reduced-motion:reduce){.intrivon-footer .footer-contact-button{transition:none}}
