@@ -1,4 +1,4 @@
-/* INTRIVON hero.
+/* INTRIVON decision animation.
    The company mark turns once as a solid object, then unfolds into a short wordless story
    of an AI agent at work, following the firm's own method: it observes (gathers data),
    evaluates (compares options) and acts and learns (delivers a decision, takes feedback),
@@ -13,14 +13,53 @@
 
   const SIZE = 640, CX = SIZE / 2, CY = SIZE / 2, FOCAL = 1700;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const stage = canvas.closest('.method-stage');
+  const panels = stage ? Array.from(stage.querySelectorAll('[data-method-phase]')) : [];
+  const selectors = stage ? Array.from(stage.querySelectorAll('[data-method-select]')) : [];
+  const panelGroup = stage?.querySelector('.method-panels');
+  let activePhase = '';
+  function showPhase(name) {
+    if (!stage) return;
+    const selected = name === 'evaluate' ? 'evaluate' : name === 'act' ? 'act' : name === 'observe' ? 'observe' : 'platform';
+    if (selected === activePhase) return;
+    activePhase = selected;
+    stage.dataset.activePhase = selected;
+    panels.forEach(panel => {
+      const active = panel.dataset.methodPhase === selected;
+      panel.classList.toggle('is-active', active);
+      panel.setAttribute('aria-hidden', String(!active));
+      panel.inert = !active;
+    });
+    selectors.forEach(control => control.setAttribute('aria-pressed', String(control.dataset.methodSelect === selected)));
+    const descriptions = {
+      platform: 'One platform: the INTRIVON logo turns into an X formed by two opposing chevrons, with its diamond at the center.',
+      observe: 'Observe: data sources feed the INTRIVON decision intelligence agent.',
+      evaluate: 'Evaluate: the agent compares alternative courses of action.',
+      act: 'Decide: analysis supports an informed decision, with feedback returning to the platform.'
+    };
+    canvas.setAttribute('aria-label', descriptions[selected]);
+  }
+  if (stage) {
+    stage.classList.add('method-ready');
+    stage.querySelector('.method-navigation').hidden = false;
+  }
+
+  // Match the actual method labels in What we do, including future font changes.
+  const methodLabel = document.querySelector('#what-we-do .number');
+  const methodStyle = methodLabel ? getComputedStyle(methodLabel) : null;
+  const captionFamily = methodStyle ? methodStyle.fontFamily : '"Work Sans", Arial, sans-serif';
+  const captionWeight = methodStyle ? methodStyle.fontWeight : '700';
+  const captionFont = `${captionWeight} 17px ${captionFamily}`;
+  const captionSpacing = methodStyle ? parseFloat(methodStyle.letterSpacing) / parseFloat(methodStyle.fontSize) : 0.17;
 
   /* ---------- timeline (ms) ---------- */
   const PH = [
-    ['turn', 5200], ['morph', 1400], ['observe', 5600], ['evaluate', 6200], ['act', 4800], ['back', 1400]
+    ['turn', 3600], ['platform', 7700], ['morph', 1400], ['observe', 5600], ['evaluate', 6200], ['act', 4800], ['back', 1400]
   ];
   const CYCLE = PH.reduce((s, p) => s + p[1], 0);
   function phaseAt(ms) {
-    let t = ms % CYCLE;
+    const intro = PH[0][1];
+    let t = ms < CYCLE ? ms : intro + (ms - CYCLE) % (CYCLE - intro);
     for (const [name, len] of PH) { if (t < len) return { name, t, len, u: t / len }; t -= len; }
     return { name: 'turn', t: 0, len: PH[0][1], u: 0 };
   }
@@ -30,7 +69,14 @@
   const ease = x => { x = clamp(x); return x * x * (3 - 2 * x); };
   const seg = (t, a, b) => ease((t - a) / (b - a));           // 0→1 between times a and b
   const fadeInOut = (t, len, f = 450) => Math.min(seg(t, 0, f), seg(t, len, len - f)); // soft edges
-  const AQUA = [100, 211, 206], WHITE = [255, 255, 255], MIST = [157, 176, 187];
+  const lightSurface = canvas.dataset.surface === 'light';
+  const AQUA = [100, 211, 206];
+  const WHITE = [255, 255, 255];
+  const intro = document.querySelector('#what-we-do .method-description');
+  const introRGB = intro && getComputedStyle(intro).color.match(/^rgba?\(\s*(\d+)[, ]+\s*(\d+)[, ]+\s*(\d+)/);
+  const bodyGrey = introRGB ? introRGB.slice(1, 4).map(Number) : [86, 99, 115];
+  const SCENE_INK = lightSurface ? bodyGrey : WHITE;
+  const MIST = lightSurface ? bodyGrey : [157, 176, 187];
   const rgb = (c, a = 1) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
   const mix = (a, b, t) => [0, 1, 2].map(i => Math.round(a[i] + (b[i] - a[i]) * t));
 
@@ -50,10 +96,10 @@
   }
   const sample = (p0, p1, p2, p3, n = 48) => Array.from({ length: n + 1 }, (_, i) => bez(p0, p1, p2, p3, i / n));
   function caption(text, alpha) {
-    if (alpha <= 0) return;
+    if (stage || alpha <= 0) return; // The label is already displayed beside the animation.
     ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = rgb(AQUA);
-    ctx.font = '700 17px Calibri, Carlito, "Segoe UI", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    if ('letterSpacing' in ctx) ctx.letterSpacing = '0.18em';
+    ctx.font = captionFont; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    if ('letterSpacing' in ctx) ctx.letterSpacing = `${Number.isFinite(captionSpacing) ? captionSpacing : 0.17}em`;
     ctx.fillText(text, CX + 4, 586); ctx.restore();
   }
   function core(cx, cy, r, glow = 0.35, alpha = 1) { // the agent: the mark's diamond, with a halo
@@ -69,8 +115,8 @@
   const D_POLY = [[50, 22.5], [65.5, 38], [50, 53.5], [34.5, 38]].map(pt);
   const D_CY = (38 - OY) * S, D_R = 15.5 * S;         // the diamond's centre (relative) and half-diagonal
   const bodies = [
-    { id: 'v', poly: V_POLY, z0: -16, z1: 16, cap: WHITE, back: [214, 224, 230], dark: [96, 114, 130], light: [214, 224, 230] },
-    { id: 'd', poly: D_POLY, z0: -6, z1: 28, cap: AQUA, back: [82, 190, 185], dark: [12, 100, 97], light: [82, 190, 185] }
+    { id: 'v', poly: V_POLY, z0: -16, z1: 16, cap: WHITE, back: WHITE, dark: [210, 236, 236], light: WHITE },
+    { id: 'd', poly: D_POLY, z0: -6, z1: 28, cap: AQUA, back: AQUA, dark: [6, 85, 85], light: AQUA }
   ];
   const faces = [];
   bodies.forEach(b => {
@@ -106,16 +152,47 @@
       if (f.kind === 'cap') colour = f.body.cap;
       else if (f.kind === 'back') colour = f.body.back;
       else { const lit = Math.max(0, n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2]); colour = mix(f.body.dark, f.body.light, 0.15 + 0.85 * lit); }
-      drawn.push({ depth, colour, alpha: al, screen: pts.map(project) });
+      drawn.push({ depth, colour, outlined: f.body.id === 'v', alpha: al, screen: pts.map(project) });
     });
     drawn.sort((p, q) => p.depth - q.depth);
     ctx.lineJoin = 'round';
     drawn.forEach(f => {
       ctx.globalAlpha = f.alpha;
       ctx.beginPath(); f.screen.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])); ctx.closePath();
-      ctx.fillStyle = rgb(f.colour); ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 0.8; ctx.fill(); ctx.stroke();
+      ctx.fillStyle = rgb(f.colour); ctx.strokeStyle = f.outlined ? rgb(AQUA) : ctx.fillStyle; ctx.lineWidth = f.outlined ? 3 : 0.8; ctx.fill(); ctx.stroke();
     });
     ctx.globalAlpha = 1;
+  }
+
+  // The original V and its inverted twin meet as an X. The diamond nests
+  // in their central opening, then remains as the core of the next scenes.
+  function drawPlatform(progress, release = 0) {
+    // Reuse the original logo polygon unchanged: no resizing or reshaping.
+    // Project the front face exactly as at the end of the rotation.
+    const frontScale = FOCAL / (FOCAL - 16);
+    const original = V_POLY.map(([x,y]) => [x*frontScale,y*frontScale]);
+    const seat = seg(progress, .10, .32);
+    const unfold = seg(progress, .40, 1);
+    const twinAlpha = seg(progress, .40, .48);
+    // Set the hinge inside the V so the opposing tips interlock.
+    const tipDepth = original[1][1] - original[4][1];
+    const centreY = original[1][1] - tipDepth * .22;
+    const seatedRadius = (centreY - original[4][1]) * .88;
+    const offsetY = -centreY * unfold; // Both the original mark and completed X share the canvas centre.
+    const polygon = (points, alpha) => {
+      ctx.save(); ctx.globalAlpha = alpha * (1-release);
+      ctx.beginPath(); points.forEach(([x,y],i) => {
+        i ? ctx.lineTo(CX+x,CY+y+offsetY) : ctx.moveTo(CX+x,CY+y+offsetY);
+      });
+      ctx.closePath(); ctx.fillStyle=rgb(WHITE); ctx.strokeStyle=rgb(AQUA);
+      ctx.lineWidth=3; ctx.lineJoin='round'; ctx.fill(); ctx.stroke(); ctx.restore();
+    };
+    polygon(original,1);
+    if (twinAlpha > 0) polygon(original.map(([x,y]) => [x,centreY+(y-centreY)*Math.cos(Math.PI*unfold)]),twinAlpha);
+    const diamondScale = FOCAL / (FOCAL - 28);
+    const r=(D_R*diamondScale*(1-seat)+seatedRadius*seat)*(1-release)+CORE_R*release;
+    const diamondY=(D_CY*diamondScale*(1-seat)+centreY*seat+offsetY)*(1-release);
+    diamond(CX,CY+diamondY,r); ctx.fillStyle=rgb(AQUA); ctx.fill();
   }
 
   /* ---------- scenes ---------- */
@@ -134,10 +211,10 @@
       if (appear <= 0) return;
       ctx.save(); ctx.globalAlpha = appear;
       const s = 9 * appear;
-      ctx.strokeStyle = rgb(WHITE, 0.85); ctx.lineWidth = 1.5;
+      ctx.strokeStyle = rgb(SCENE_INK, 0.85); ctx.lineWidth = 1.5;
       ctx.strokeRect(nd.p0[0] - s - 6, nd.p0[1] - s, 2 * s, 2 * s);
       // a little "data" inside: two short lines
-      ctx.strokeStyle = rgb(WHITE, 0.45); ctx.beginPath();
+      ctx.strokeStyle = rgb(SCENE_INK, 0.45); ctx.beginPath();
       ctx.moveTo(nd.p0[0] - s - 2, nd.p0[1] - 3); ctx.lineTo(nd.p0[0] + s - 10, nd.p0[1] - 3);
       ctx.moveTo(nd.p0[0] - s - 2, nd.p0[1] + 3); ctx.lineTo(nd.p0[0] + s - 13, nd.p0[1] + 3); ctx.stroke();
       // connection draws toward the core
@@ -156,7 +233,7 @@
       }
       ctx.restore();
     });
-    caption('01 / OBSERVE', fadeInOut(t, len));
+    caption('02 / OBSERVE', fadeInOut(t, len));
   }
 
   // Evaluate: options fan out to the right; the agent scans them and settles on one.
@@ -174,7 +251,7 @@
       const scanning = clamp(1 - Math.abs((t - (scanStart + scanEach * i + scanEach / 2)) / (scanEach * 0.6)));
       const decided = seg(t, decide, decide + 500);
       const isChosen = i === CHOSEN;
-      let colour = mix(MIST, WHITE, scanning), alpha = 0.55 + 0.45 * scanning, width = 1.25 + 1.2 * scanning;
+      let colour = mix(MIST, SCENE_INK, scanning), alpha = 0.55 + 0.45 * scanning, width = 1.25 + 1.2 * scanning;
       if (decided > 0) {
         if (isChosen) { colour = mix(colour, AQUA, decided); width = 1.25 + 1.5 * decided; alpha = 1; }
         else alpha *= 1 - 0.75 * decided;
@@ -189,7 +266,7 @@
       }
       ctx.restore();
     });
-    caption('02 / EVALUATE', fadeInOut(t, len));
+    caption('03 / EVALUATE', fadeInOut(t, len));
   }
 
   // Act & learn: the chosen course becomes a delivered decision; feedback flows back to the agent.
@@ -207,14 +284,14 @@
     // the card draws itself
     const cp = seg(t, 450, 1100);
     if (cp > 0) {
-      ctx.strokeStyle = rgb(WHITE, 0.9); ctx.lineWidth = 1.5;
+      ctx.strokeStyle = rgb(SCENE_INK, 0.9); ctx.lineWidth = 1.5;
       const per = (CARD.w + CARD.h) * 2 * cp;
       ctx.setLineDash([per, 9999]); ctx.strokeRect(CARD.x, CARD.y, CARD.w, CARD.h); ctx.setLineDash([]);
     }
     [0, 1, 2].forEach(i => {
       const lp = seg(t, 1100 + i * 220, 1400 + i * 220);
       if (lp <= 0) return;
-      ctx.strokeStyle = rgb(WHITE, 0.5); ctx.lineWidth = 1.5; ctx.beginPath();
+      ctx.strokeStyle = rgb(SCENE_INK, 0.5); ctx.lineWidth = 1.5; ctx.beginPath();
       ctx.moveTo(CARD.x + 12, CARD.y + 20 + i * 14); ctx.lineTo(CARD.x + 12 + (CARD.w - 24) * (i === 2 ? 0.6 : 1) * lp, CARD.y + 20 + i * 14); ctx.stroke();
     });
     const stamp = seg(t, 1900, 2250);
@@ -232,33 +309,34 @@
       }
     }
     ctx.restore();
-    caption('03 / ACT & LEARN', fadeInOut(t, len));
+    caption('04 / DECIDE', fadeInOut(t, len));
   }
 
   /* ---------- frame ---------- */
-  let playing = !reduced.matches, visible = true, elapsed = 0, previous = 0, frameId = 0, lastDraw = 0;
+  let playing = !reduced.matches, visible = !('IntersectionObserver' in window), elapsed = reduced.matches && stage ? 8800 : 0, previous = 0, frameId = 0, lastDraw = 0;
   let tiltX = 0, tiltY = 0, targetX = 0, targetY = 0;
 
   function turnAngles(u) { // starts and ends at rest, facing front; quickest past the back
-    return { ry: 2 * Math.PI * u - Math.sin(2 * Math.PI * u) + tiltX * 0.3, rx: 0.14 + 0.2 * Math.sin(2 * Math.PI * u) + tiltY * 0.25 };
+    return { ry: 2 * Math.PI * u - Math.sin(2 * Math.PI * u), rx: 0.2 * Math.sin(2 * Math.PI * u) };
   }
 
   function draw(ms) {
     ctx.clearRect(0, 0, SIZE, SIZE);
     const ph = phaseAt(ms);
+    if (stage) stage.dataset.animationPhase = ph.name;
+    showPhase(ph.name);
     corePulse = Math.max(0, corePulse - 0.06);
     if (ph.name === 'turn') {
       drawMark(turnAngles(ph.u));
       return;
     }
-    if (ph.name === 'morph' || ph.name === 'back') {
-      // m: 0 = the full mark, 1 = only the agent core at the centre
-      const m = ph.name === 'morph' ? ease(ph.u) : 1 - ease(ph.u);
-      const a = { ry: tiltX * 0.3 * (1 - m), rx: 0.14 * (1 - m) + tiltY * 0.25 * (1 - m) };
-      drawMark(a, {
-        v: { scale: 1 - 0.35 * m, alpha: 1 - m },
-        d: { scale: 1 - (1 - CORE_R / D_R) * m, dy: -D_CY * m }
-      });
+    if (ph.name === 'platform') { drawPlatform(clamp(ph.t / 4200)); return; }
+    if (ph.name === 'morph') { drawPlatform(1, ease(ph.u)); return; }
+    if (ph.name === 'back') {
+      const m = ease(ph.u);
+      ctx.save();
+      drawMark({ry:0,rx:0}, {v:{scale:.65+.35*m,alpha:m},d:{scale:CORE_R/D_R+(1-CORE_R/D_R)*m,dy:-D_CY*(1-m)}});
+      ctx.restore();
       return;
     }
     if (ph.name === 'observe') observe(ph.t, ph.len);
@@ -270,18 +348,43 @@
     core(CX, CY, CORE_R * breathe, (0.35 + 0.5 * corePulse) * halo);
   }
 
+  const referencePanel = panels.find(panel => panel.dataset.methodPhase === 'platform');
+  function alignArtwork() {
+    // Always measure the first panel, even while another phase is visible.
+    let shift = 0;
+    if (referencePanel && matchMedia('(min-width:701px)').matches) {
+      const lines = selector => {
+        const range = document.createRange();
+        range.selectNodeContents(referencePanel.querySelector(selector));
+        return Array.from(range.getClientRects()).filter(rect => rect.height > 0);
+      };
+      const title = lines('h3'), body = lines('p');
+      if (title.length && body.length) {
+        const target = (title[0].top + body[body.length - 1].bottom) / 2;
+        const box = canvas.getBoundingClientRect();
+        const previousShift = parseFloat(canvas.style.top) || 0;
+        shift = previousShift + target - (box.top + box.height / 2);
+      }
+    }
+    canvas.style.position = 'relative';
+    canvas.style.top = shift + 'px';
+  }
   function fit() {
+    alignArtwork();
     const css = canvas.clientWidth || 430;
     const px = Math.round(css * Math.min(window.devicePixelRatio || 1, 2.5));
     if (canvas.width !== px) { canvas.width = px; canvas.height = px; }
     ctx.setTransform(px / SIZE, 0, 0, px / SIZE, 0, 0);
   }
-  function still() { ctx.clearRect(0, 0, SIZE, SIZE); drawMark({ ry: -0.55 + tiltX * 0.3, rx: 0.2 + tiltY * 0.25 }); }
+  function still() {
+    if (stage) { draw(elapsed); return; }
+    ctx.clearRect(0, 0, SIZE, SIZE); drawMark({ ry: -0.55 + tiltX * 0.3, rx: 0.2 + tiltY * 0.25 });
+  }
 
   function frame(now) {
     frameId = 0;
     if (!playing || !visible || document.hidden) return;
-    if (previous) elapsed += Math.min(now - previous, 100);
+    if (previous) elapsed += 1.5 * Math.min(now - previous, 100);
     previous = now;
     frameId = requestAnimationFrame(frame);
     if (now - lastDraw < 28) return; // ~30 fps is plenty and halves the work on phones
@@ -293,19 +396,31 @@
   function sync() {
     cancelAnimationFrame(frameId); frameId = 0; previous = 0;
     if (button) {
-      button.textContent = playing ? 'Pause animation' : 'Play animation';
-      button.setAttribute('aria-label', playing ? 'Pause logo animation' : 'Play logo animation');
+      button.hidden = false;
+      if (!stage) button.textContent = playing ? 'Pause animation' : 'Play animation';
+      button.dataset.paused = String(!playing);
+      button.setAttribute('aria-label', playing ? 'Pause process animation' : 'Play process animation');
     }
+    if (panelGroup && playing) panelGroup.setAttribute('aria-live', 'off');
     if (playing && visible && !document.hidden) frameId = requestAnimationFrame(frame);
   }
 
   if (button) button.addEventListener('click', () => { playing = !playing; sync(); });
+  selectors.forEach(control => control.addEventListener('click', () => {
+    // Selecting a stage holds a representative frame so the visitor can read it.
+    const moments = { platform: 8800, observe: 16000, evaluate: 22000, act: 27800 };
+    playing = false;
+    elapsed = moments[control.dataset.methodSelect];
+    if (panelGroup) panelGroup.setAttribute('aria-live', 'polite');
+    sync();
+    draw(elapsed);
+  }));
   reduced.addEventListener('change', () => { playing = !reduced.matches; if (reduced.matches) still(); sync(); });
   document.addEventListener('visibilitychange', sync);
-  if ('IntersectionObserver' in window) new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }, { threshold: 0.05 }).observe(canvas);
+  if ('IntersectionObserver' in window) new IntersectionObserver(entries => { visible = entries[0].isIntersecting && entries[0].intersectionRatio >= .5; sync(); }, { threshold: [0,.5] }).observe(canvas);
 
-  const hero = canvas.closest('.hero');
-  if (hero && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  const hero = canvas.closest('.method-art, .hero');
+  if (hero && !reduced.matches && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     hero.addEventListener('pointermove', e => {
       const b = hero.getBoundingClientRect();
       targetX = ((e.clientX - b.left) / b.width - 0.5) * 2;
@@ -316,8 +431,9 @@
   }
 
   const refit = () => { fit(); if (reduced.matches && !playing) still(); else draw(elapsed); };
-  if ('ResizeObserver' in window) new ResizeObserver(refit).observe(canvas); else window.addEventListener('resize', refit);
-  if (document.fonts && document.fonts.load) document.fonts.load('700 17px Carlito').catch(() => {});
+  if ('ResizeObserver' in window) { const observer = new ResizeObserver(refit); observer.observe(canvas); if (referencePanel) observer.observe(referencePanel); } else window.addEventListener('resize', refit);
+  if (document.fonts && document.fonts.load) document.fonts.load(captionFont).then(refit).catch(() => {});
+  if (document.fonts) document.fonts.ready.then(refit);
   fit();
   if (reduced.matches) still(); else draw(0);
   sync();

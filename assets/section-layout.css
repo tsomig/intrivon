@@ -1,0 +1,25 @@
+/* Every section uses the same content edges as the full-width firm caption. */
+:root{--section-max:1340px;--section-gutter:32px}
+.section.v28-layout .container,.closing.v28-layout .container,.hero-intro .wrap{
+ width:100%;max-width:var(--section-max);margin-inline:auto;padding-inline:var(--section-gutter)
+}
+.hero-intro h2,#what-we-do .section-top h2,#our-firm .firm-copy h2,
+#team>.container>h2,#services .section-top h2,#sectors .section-top h2,
+#values .section-top h2,.closing.v28-layout h2{
+ width:100%;max-width:none;text-align:left;white-space:normal;text-wrap:wrap
+}
+.hero-intro p,#what-we-do .method-description,#our-firm .firm-copy .lead,
+#team .team-intro,#services .section-top>p,#sectors .section-top>p,#values .section-top>p,
+.closing.v28-layout>.container>p{
+ width:100%;max-width:none;margin-inline:0;text-align:left
+}
+#services .section-top,#sectors .section-top,#values .section-top{display:block}
+#services .section-top h2,#sectors .section-top h2,#values .section-top h2{margin-bottom:0}
+#services .section-top>p,#sectors .section-top>p,#values .section-top>p{margin-top:clamp(24px,3vw,40px);margin-bottom:0}
+@media(max-width:600px){:root{--section-gutter:20px}}
+
+/* Section labels and contact CTA share the navigation typography. */
+body .eyebrow,body .v28-layout .eyebrow,body .hero-intro-link{font-family:var(--sans);font-size:.875rem;font-weight:400;line-height:1.3;letter-spacing:0;text-transform:uppercase}
+
+/* Match ONE PLATFORM; preserve the partnership caption typography. */
+body .eyebrow:not(.firm-caption-copy .eyebrow),body .v28-layout .eyebrow:not(.firm-caption-copy .eyebrow){font-family:var(--sans);font-size:1rem;font-weight:600;line-height:1.3;letter-spacing:.16em;text-transform:uppercase}

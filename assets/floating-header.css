@@ -1,0 +1,56 @@
+/* One translucent surface grows from the signature into a horizontal bar. */
+:root{--header-h:0px}
+html{scroll-padding-top:116px}
+.floating-header{position:fixed;top:calc(20px + env(safe-area-inset-top,0px));left:24px;right:24px;z-index:50;pointer-events:none;color:#ffffff;--signature-width:244px;--bar-height:60px}
+.floating-nav{position:relative;display:flex;justify-content:flex-start;height:var(--bar-height);isolation:isolate}
+.floating-nav::before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--signature-width);border-radius:18px;background:rgba(20,35,57,.70);box-shadow:0 4px 20px rgba(16,29,46,.07);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);z-index:-1;transition:width .45s cubic-bezier(.22,1,.36,1)}
+.nav-open .floating-nav::before{width:100%}
+.floating-brand-box{position:relative;display:flex;align-items:center;gap:16px;width:var(--signature-width);flex-shrink:0;padding:8px 24px 8px 8px;pointer-events:auto}
+.floating-brand{display:flex;align-items:center;text-decoration:none}
+.floating-brand img{display:block;width:152px;height:auto}
+.floating-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;width:44px;height:44px;flex-shrink:0;padding:0;border:0;border-radius:12px;background:transparent;color:#ffffff;cursor:pointer;transition:background .2s,border-color .2s}
+.floating-toggle:hover,.floating-toggle:focus-visible{background:#64d3ce;border-color:#64d3ce}
+.floating-toggle span{display:block;width:22px;height:1.5px;background:currentColor;transition:transform .25s,opacity .2s}
+.nav-open .floating-toggle span:first-child{transform:translateY(7.5px) rotate(45deg)}
+.nav-open .floating-toggle span:nth-child(2){opacity:0}
+.nav-open .floating-toggle span:last-child{transform:translateY(-7.5px) rotate(-45deg)}
+.floating-panel{position:absolute;left:var(--signature-width);right:auto;top:0;width:max-content;max-width:calc(100% - var(--signature-width));height:var(--bar-height);display:flex;align-items:center;justify-content:flex-start;gap:24px;padding:0 24px 0 12px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;clip-path:inset(0 100% 0 0);opacity:0;visibility:hidden;pointer-events:none;transition:clip-path .45s cubic-bezier(.22,1,.36,1),opacity .25s,visibility .45s}
+.nav-open .floating-panel{clip-path:inset(0);opacity:1;visibility:visible;pointer-events:auto}
+.floating-panel a{position:relative;flex-shrink:0;color:#ffffff;text-decoration:none;font:400 .875rem/1.3 var(--sans);letter-spacing:0;text-transform:uppercase;white-space:nowrap;padding:8px 0;transition:color .2s}
+.floating-panel a:hover,.floating-panel a[aria-current=true]{color:#64d3ce}
+.floating-header :focus-visible{outline:2px solid #64d3ce;outline-offset:4px}
+@media(max-width:700px){
+ .floating-header{top:calc(12px + env(safe-area-inset-top,0px));left:12px;right:12px;--signature-width:224px;--bar-height:56px}
+ .floating-brand-box{gap:12px;padding:6px 18px 6px 6px}
+ .floating-toggle{width:44px;height:44px;border-radius:12px}
+ .floating-brand img{width:144px}
+ .floating-nav::before{border-radius:16px}
+ .nav-open .floating-brand-box{width:56px;padding:6px}
+ .nav-open .floating-brand{display:none}
+ .floating-panel{left:56px;right:auto;max-width:calc(100% - 56px);padding:0 20px 0 12px;gap:22px}
+ html{scroll-padding-top:96px}
+}
+@supports not ((backdrop-filter:blur(20px)) or (-webkit-backdrop-filter:blur(20px))){.floating-nav::before{background:rgba(20,35,57,.85)}}
+@media(prefers-reduced-motion:reduce){.floating-nav::before,.floating-panel,.floating-toggle,.floating-toggle span{transition:none}}
+@media print{.floating-header{display:none}}
+
+.floating-header.nav-open .floating-nav{display:grid;grid-template-columns:auto minmax(0,1fr);height:auto;min-height:var(--bar-height);align-items:center}
+.nav-open .floating-brand-box{grid-area:1/1;align-self:start;height:var(--bar-height)}
+.nav-open .floating-panel{grid-area:1/2;position:static;width:auto;max-width:none;min-height:var(--bar-height);height:auto;flex-wrap:wrap;justify-content:flex-end;align-content:center;gap:0 24px;padding-block:6px;overflow:visible}
+@media(max-width:700px){.nav-open .floating-panel{padding-inline:4px 12px}.nav-open .floating-panel a{font-size:.8rem}}
+
+@media(max-width:700px){
+ .nav-open .floating-panel{justify-content:flex-start;align-items:center;padding:6px 12px;column-gap:24px}
+ .nav-open .floating-panel a{display:flex;align-items:center;min-height:44px;padding-block:0;font-size:.875rem}
+}
+
+/* Keep the compact menu independent of Safari's changing viewport height. */
+@media(max-width:700px){
+ .floating-header.nav-open .floating-nav{grid-template-columns:56px minmax(0,1fr);grid-template-rows:auto;align-items:start}
+ .floating-header.nav-open .floating-panel{display:grid;grid-template-columns:repeat(3,max-content);grid-auto-rows:44px;justify-content:end;align-content:start;gap:0 clamp(8px,3vw,16px);min-height:0;padding:6px 12px 6px 0;clip-path:none;transition:none}
+ .floating-header.nav-open .floating-panel a{height:44px;min-height:0;justify-self:start;touch-action:manipulation}
+ .floating-header .floating-toggle{touch-action:manipulation}
+}
+@media(max-width:374px){
+ .floating-header.nav-open .floating-panel{grid-template-columns:repeat(2,max-content)}
+}

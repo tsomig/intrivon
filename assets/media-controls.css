@@ -1,0 +1,22 @@
+/* Consistent icon-only media controls, based on the supplied reference. */
+.hero-video-toggle,.method-toggle,#team .expert-arrow,#team .expert-playback{
+ display:grid;place-items:center;flex:0 0 auto;width:36px;height:36px;
+ padding:0;border:0;border-radius:6px;background:#f2f2f2;color:#343434;
+ box-shadow:none;backdrop-filter:none;cursor:pointer;
+ transition:background .18s ease,color .18s ease;
+}
+.hero-video-toggle:hover,.method-toggle:hover,#team .expert-arrow:hover,#team .expert-playback:hover{background:#e4e4e4;color:#171717}
+.hero-video-toggle:focus-visible,.method-toggle:focus-visible,#team .expert-arrow:focus-visible,#team .expert-playback:focus-visible{outline:2px solid var(--aqua);outline-offset:4px}
+.hero-video-toggle svg,.method-toggle svg,#team .expert-arrow svg,#team .expert-playback svg{
+ width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;
+}
+#team .expert-playback .pause-icon{display:block}
+#team .expert-playback .play-icon{display:none}
+#team .expert-playback[data-paused="true"] .pause-icon{display:none}
+#team .expert-playback[data-paused="true"] .play-icon{display:block}
+@media(max-width:700px){.hero-video-toggle,.method-toggle,#team .expert-arrow,#team .expert-playback{width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){.hero-video-toggle,.method-toggle,#team .expert-arrow,#team .expert-playback{transition:none}}
+
+/* Translucent hero control, matching the supplied BCG reference. */
+.hero-video .hero-video-toggle{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.42);color:#fff;border-radius:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.hero-video .hero-video-toggle:hover{background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.7);color:#fff}
