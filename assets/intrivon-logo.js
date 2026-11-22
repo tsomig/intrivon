@@ -1,4 +1,4 @@
-/* INTRIVON decision animation.
+/* Intrivon decision animation.
    The company mark turns once as a solid object, then unfolds into a short wordless story
    of an AI agent at work, following the firm's own method: it observes (gathers data),
    evaluates (compares options) and acts and learns (delivers a decision, takes feedback),
@@ -32,8 +32,8 @@
     });
     selectors.forEach(control => control.setAttribute('aria-pressed', String(control.dataset.methodSelect === selected)));
     const descriptions = {
-      platform: 'One platform: the INTRIVON logo turns into an X formed by two opposing chevrons, with its diamond at the center.',
-      observe: 'Observe: data sources feed the INTRIVON decision intelligence agent.',
+      platform: 'One platform: the Intrivon logo turns into an X formed by two opposing chevrons, with its diamond at the center.',
+      observe: 'Observe: data sources feed the Intrivon decision intelligence agent.',
       evaluate: 'Evaluate: the agent compares alternative courses of action.',
       act: 'Decide: analysis supports an informed decision, with feedback returning to the platform.'
     };

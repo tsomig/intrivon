@@ -54,3 +54,6 @@ html{scroll-padding-top:116px}
 @media(max-width:374px){
  .floating-header.nav-open .floating-panel{grid-template-columns:repeat(2,max-content)}
 }
+
+/* Match the opaque approved logo master to its official navy surface. */
+.floating-nav::before{background:#142339}
